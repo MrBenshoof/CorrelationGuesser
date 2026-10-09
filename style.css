@@ -174,9 +174,6 @@ em { font-style: italic; font-family: Georgia, "Times New Roman", serif; }
   border-radius: var(--radius);
   box-shadow: var(--shadow);
   padding: 16px 20px 12px;
-  max-width: min(100%, max(340px, calc(100vh - 300px)));
-  width: 100%;
-  margin: 0 auto;
 }
 .guess-form label { display: block; font-weight: 600; margin-bottom: 8px; }
 .muted { color: var(--muted); font-weight: 400; }
@@ -261,7 +258,7 @@ tbody tr + tr td { border-top: 1px solid var(--border); }
 /* ---------- Responsive ---------- */
 @media (max-width: 900px) {
   .layout { grid-template-columns: 1fr; }
-  .plot-card, .guess-form { max-width: 100%; }
+  .plot-card { max-width: 100%; }
 }
 @media (max-width: 480px) {
   .topbar { padding: 12px 14px 4px; }
