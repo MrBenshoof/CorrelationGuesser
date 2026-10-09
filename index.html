@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Guess the Correlation</title>
+  <meta name="description" content="Practice estimating the Pearson correlation coefficient (r) from a scatterplot.">
+  <script>
+    // Apply the saved theme before first paint to avoid a flash.
+    (function () {
+      var t = null;
+      try { t = localStorage.getItem('cg-theme'); } catch (e) {}
+      if (t !== 'light' && t !== 'dark') {
+        t = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+      }
+      document.documentElement.setAttribute('data-theme', t);
+    })();
+  </script>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="brand-mark" aria-hidden="true">r</span>
+      <h1>Guess the Correlation</h1>
+    </div>
+    <button id="theme-toggle" class="theme-toggle" type="button" aria-label="Switch to dark mode" title="Toggle light/dark mode">
+      <svg class="icon icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+      <svg class="icon icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.5"/><path d="M12 2v2.5M12 19.5V22M2 12h2.5M19.5 12H22M4.9 4.9l1.8 1.8M17.3 17.3l1.8 1.8M4.9 19.1l1.8-1.8M17.3 6.7l1.8-1.8"/></svg>
+    </button>
+  </header>
+
+  <main class="layout">
+    <section class="left" aria-label="Scatterplot and guess">
+      <div id="plot-card" class="plot-card" data-state="guessing">
+        <svg id="plot" viewBox="0 0 640 640" role="img" aria-label="Scatterplot with 24 data points" preserveAspectRatio="xMidYMid meet"></svg>
+      </div>
+      <p id="plot-hint" class="hint">Look at the pattern in the points, then type your estimate of <em>r</em> below.</p>
+
+      <form id="guess-form" class="guess-form" autocomplete="off" novalidate>
+        <label for="guess-input">Your estimate of <em>r</em> <span class="muted">(−1 to 1)</span></label>
+        <div class="guess-row">
+          <button id="sign-btn" type="button" class="btn btn-ghost sign-btn" aria-label="Toggle positive or negative sign" title="Toggle +/−">±</button>
+          <input id="guess-input" type="text" inputmode="text" placeholder="e.g. 0.65" aria-describedby="guess-error">
+          <button id="submit-btn" type="submit" class="btn btn-primary">Check</button>
+          <button id="next-btn" type="button" class="btn btn-primary" hidden>Next Puzzle →</button>
+        </div>
+        <p id="guess-error" class="error" role="alert"></p>
+      </form>
+    </section>
+
+    <aside class="right" aria-label="Results and statistics">
+      <div id="result-card" class="card result-card">
+        <div class="r-label">Pearson correlation <em>r</em></div>
+        <div id="r-value" class="r-value">?</div>
+        <div id="verdict" class="verdict" role="status" aria-live="polite">Make a guess to reveal the true value.</div>
+        <dl id="details" class="details" hidden>
+          <div><dt>Your guess</dt><dd id="d-guess">—</dd></div>
+          <div><dt>Off by</dt><dd id="d-error">—</dd></div>
+          <div><dt><em>r</em>²</dt><dd id="d-r2">—</dd></div>
+          <div><dt>Points</dt><dd id="d-n">—</dd></div>
+          <div class="wide"><dt>Line of best fit</dt><dd id="d-eq">—</dd></div>
+        </dl>
+        <p id="explore-tip" class="tip" hidden>
+          <strong>Explore:</strong> click the grid to add a point, drag any point to move it, or double-click a point to remove it. Watch <em>r</em> and the line update live.
+        </p>
+      </div>
+
+      <div class="card stats-card">
+        <h2>Your stats</h2>
+        <div class="stat-grid">
+          <div><span id="s-attempts" class="stat-num">0</span><span class="stat-label">Puzzles</span></div>
+          <div><span id="s-success" class="stat-num">0</span><span class="stat-label">Within 0.1</span></div>
+          <div><span id="s-streak" class="stat-num">0</span><span class="stat-label">Streak</span></div>
+          <div><span id="s-best" class="stat-num">0</span><span class="stat-label">Best streak</span></div>
+        </div>
+        <details class="history">
+          <summary>Guess history</summary>
+          <div id="history-empty" class="muted small">No guesses yet.</div>
+          <div class="table-wrap">
+            <table id="history-table" hidden>
+              <thead><tr><th>#</th><th>Guess</th><th>True <em>r</em></th><th>Off by</th><th></th></tr></thead>
+              <tbody id="history-body"></tbody>
+            </table>
+          </div>
+          <button id="clear-btn" type="button" class="btn btn-ghost small-btn">Clear stats &amp; history</button>
+          <p class="muted small">Saved only in this browser on this device.</p>
+        </details>
+      </div>
+    </aside>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
