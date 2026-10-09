@@ -87,6 +87,7 @@ em { font-style: italic; font-family: Georgia, "Times New Roman", serif; }
   flex: none;
 }
 
+.top-actions { display: flex; gap: 10px; flex: none; }
 .theme-toggle {
   flex: none;
   width: 44px; height: 44px;
@@ -107,6 +108,9 @@ em { font-style: italic; font-family: Georgia, "Times New Roman", serif; }
 .icon-moon { fill: currentColor; stroke: none; }
 :root[data-theme="dark"] .icon-moon { display: none; }
 :root:not([data-theme="dark"]) .icon-sun { display: none; }
+.icon-compress { display: none; }
+.is-fullscreen .icon-expand { display: none; }
+.is-fullscreen .icon-compress { display: inline; }
 
 /* ---------- Layout ---------- */
 .layout {
@@ -270,4 +274,9 @@ tbody tr + tr td { border-top: 1px solid var(--border); }
 }
 @media (prefers-reduced-motion: reduce) {
   * { transition: none !important; animation: none !important; }
+}
+
+/* Full-screen: let the plot use the extra height (the guess box now lives in the right column) */
+@media (min-width: 901px) {
+  .is-fullscreen .plot-card { max-width: min(100%, max(340px, calc(100vh - 170px))); }
 }

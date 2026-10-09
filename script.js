@@ -418,6 +418,30 @@
   });
   applyThemeLabel();
 
+  // Full-screen toggle (hidden where the browser doesn't support it, e.g. iPhone Safari)
+  var fsBtn = $('fs-toggle');
+  var root = document.documentElement;
+  var canFs = !!(root.requestFullscreen || root.webkitRequestFullscreen);
+  function fsElement() { return document.fullscreenElement || document.webkitFullscreenElement; }
+  function syncFs() {
+    var on = !!fsElement();
+    document.body.classList.toggle('is-fullscreen', on);
+    fsBtn.setAttribute('aria-label', on ? 'Exit full screen' : 'Enter full screen');
+    fsBtn.title = on ? 'Exit full screen' : 'Full screen';
+  }
+  if (canFs) {
+    fsBtn.hidden = false;
+    fsBtn.addEventListener('click', function () {
+      try {
+        if (fsElement()) (document.exitFullscreen || document.webkitExitFullscreen).call(document);
+        else (root.requestFullscreen || root.webkitRequestFullscreen).call(root);
+      } catch (e) { /* request denied */ }
+    });
+    document.addEventListener('fullscreenchange', syncFs);
+    document.addEventListener('webkitfullscreenchange', syncFs);
+    syncFs();
+  }
+
   // ---------- Go ----------
   drawGrid();
   renderStats();
